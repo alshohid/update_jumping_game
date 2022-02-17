@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Game Project</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
+     
+    <link rel="stylesheet" media="(max-width:700px)" href="mobile2.css">
+    <link rel="stylesheet" media="(min-width:880px)" href="game.css">
+   
+</head>
+<body>
+
+<section class="city-outer">
+    <audio  id="my-audio">
+        <source src="sounds/game-sound.mp3" type="audio/mpeg">
+    </audio>
+    <audio  class="game-audio">
+        <source src="sounds/game6.mp3" type="audio/mpeg">
+    </audio>
+    <audio  class="cat-audio">
+        <source src="sounds/lag-sound.mp3" type="audio/mpeg">
+    </audio>
+  
+    <div id="score">
+        <h1>Your Score:0</h1>
+        
+        </div>
+    <div class="cloud">
+
+    </div>
+    <div class="city-inner">
+
+    </div>
+   
+    <div class="car-div">
+        <img  class="car"src="images/running.gif" alt="girlImage">
+        <div class="game-over">
+            <h2 class="points">Points : 0 </h2>
+            <h1>Game Over.. </h1>
+            
+            <i id="imoji" class="fas fa-grin-tears"></i>
+        </div>
+        <img class="cat animationcat" src="images/dog.gif" alt="girl-image">
+    </div>
+   
+    </section>
+    <section>
+
+        <div class="game-starter">
+            <h1>Your game Will be start after <span id="counter">5</span> seconds</h1>
+        </div>
+    </section>
+    
+
+
+
+   
+    <script src="game.js"></script>
+</body>
+</html>

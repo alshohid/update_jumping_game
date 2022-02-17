@@ -1,0 +1,220 @@
+ * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  overflow-y: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+}
+ 
+.game-starter{
+
+  text-transform: capitalize;
+    position: absolute;
+    top: 20%;
+    left: 25%;
+    background: white;
+    width: 60%;
+    height: 298px;
+    color:salmon;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 21px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: bold;
+    visibility:visible;
+} 
+#counter{
+  font-size: 3rem;
+  color: teal;
+}
+.opacity{
+  opacity: 0.2;
+}
+.city-outer {
+  
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(180deg, rgb(16, 17, 29), rgb(0, 16, 58));
+
+  position: relative;
+  overflow-x: hidden;
+}
+.city-outer::before {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  content: "";
+  margin: 0 auto;
+  top: 3em;
+background: rgb(226, 213, 163);
+ 
+}
+.daytoNight{
+  background: linear-gradient(
+    -360deg,
+    rgba(143, 255, 245),
+    rgba(247, 130, 20, 0.795)
+  );
+}
+.rainAnimation{
+  background-image: linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.4)), url("images/rain3.png");
+  background-repeat: repeat;
+  
+  height: 100vh;
+  animation: rain 0.4s linear infinite;
+}
+@keyframes rain{
+  from{background-position:100% 20% ;}
+  to{background-position:95% 100%;}
+}
+.cloud {
+  background: url("images/rain2.png");
+  height: 165px;
+  background-repeat: repeat-x;
+  margin-top: 3em;
+  background-size: 291px;
+  width: 1000%;
+}
+.cloudanimation{
+
+  animation:  animationcloud 40s linear infinite;
+}
+@keyframes animationcloud{
+100%{
+  transform: translateX(-2500px);
+}
+  
+}
+.city-inner {
+  background: url("images/myroad.png");
+  background-size: 591px;
+  position: absolute;
+  bottom: 0px;
+  width: 1000%;
+  height: 380px;
+  background-repeat: repeat;
+ 
+}
+.roadAnimation{
+  animation: road 10s linear infinite;
+}
+@keyframes road{
+  100%{
+    transform: translateX(-2500px);
+  }
+}
+.car {
+  position: absolute;
+  bottom: 2%;
+  left: 15%;
+  visibility: hidden;
+  width: 95px;
+  height: 200px;
+}
+.cat {
+  position: absolute;
+  bottom: 1%;
+  right: 5%;
+  height: 200px;
+  width: 200px;
+  visibility: hidden;
+}
+.animationcat {
+  animation: catAnimation 5s linear infinite;
+}
+@keyframes catAnimation {
+  0% {
+    left: 100vw;
+  }
+  100% {
+    left: -10vw;
+  }
+}
+.animationCar {
+  animation: car 0.9s linear infinite;
+}
+
+@keyframes car {
+  0% {
+    bottom: 0px;
+  }
+  30% {
+    bottom: 150px;
+  }
+  50% {
+    bottom: 450px;
+  } 
+  80%{
+    bottom: 300px;
+  }
+  100%{
+    bottom: 0px;  
+  }
+}
+.game-over {
+  width: 60%;
+  height: 300px;
+  left: 21%;
+  top: 20%;
+  text-align: center;
+  margin: 0 auto;
+  background-color: #f3faf4;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+  
+  font-weight: bold;
+  border-radius: 3px 3px;
+  box-shadow: 4px 6px 5px black;
+}
+
+.points{
+  position: relative;
+  margin: 30px;
+  text-shadow: 5px 2px black;
+  font-size: 4rem;
+  color:green;
+ height: 100px;
+ font-family: "Sofia", sans-serif;
+}
+.game-over h1 { 
+  position: relative;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  width: 75%;
+   top: -68px;
+  left: 12%;
+  font-size: 5rem;
+ text-shadow: 2px 3px 4px black;
+  color:green;
+ 
+}
+#imoji{
+  position: relative;
+  top: -22%;
+  left: -2%;
+  font-size: 78px;
+  /* height: 100px; */
+  color:green;
+}
+#score{
+  text-align: center;
+
+}
+#score h1{
+   margin: 10px;
+   padding: 5px;
+   font-size: 2rem;
+   color: #f6b93b;
+  border:2px solid white ;
+  background: blue;
+  border-radius: 5px;
+  width: 21%;
+   font-family: Georgia, 'Times New Roman', Times, serif;
+}
