@@ -1,167 +1,165 @@
-var score = 0;
-var cross = true;
-
- 
-var gamestarter = document.querySelector(".game-starter");
-var mycloud = document.querySelector(".cloud");
-var cityInner = document.querySelector(".city-inner");
-var cityouter=document.querySelector(".city-outer");
-var cat = document.querySelector(".cat");
-let car = document.querySelector(".car");
-var myaudio = document.querySelector("#my-audio");
-var gameaudio = document.querySelector(".game-audio");
-var cataudio = document.querySelector(".cat-audio");
-var points=document.querySelector(".points");
-
-var second = document.querySelector("#counter").textContent;
-
-var countdown = setInterval(function () {
-  second--;
-  document.querySelector("#counter").textContent = second;
-  if (second <= 0) {
-    clearInterval(countdown);
-    cat.style.visibility = "visible";
-    car.style.visibility = "visible";
-    gamestarter.style.visibility = "hidden";
-
-    mycloud.classList.add("cloudanimation");
-    cityInner.classList.add("roadAnimation");
-    cat.classList.add("animationcat");
-   
-
-  var toggolTime=setInterval(function(){
-    cityouter.classList.toggle("daytoNight");
-    cityouter.classList.toggle("rainAnimation");
-  },10000);
-
-
-
-function changedImg(){
-
-  var photos=["images/dog.gif","images/cat2.gif","images/horin.gif",];
-
-const count=Math.floor(Math.random()*photos.length);
-console.log("Hey i am here"+count);
-cat.src=photos[count];
-
-}
-var music=false;
-document.addEventListener("keypress",keycontrol1);
-function keycontrol1(e)
-{
-  if(e.keyCode==109)
-  {
-    if(music)
-    {
-      gameaudio.pause();
-      music=false;
-    }
-    else{
-      gameaudio.play();
-      music=true;
-    }
-
+class UI {
+  constructor() {
+    this.cloud = document.querySelector(".cloud");
+    this.cityInner = document.querySelector(".city-inner");
+    this.cityOuter = document.querySelector(".city-outer");
+    this.cat = document.querySelector(".cat");
+    this.car = document.querySelector(".car");
+    this.gameStarter = document.querySelector(".game-starter");
+    this.gameAudio = document.querySelector(".game-audio");
+    this.catAudio = document.querySelector(".cat-audio");
+    this.myAudio = document.querySelector("#my-audio");
+    this.points = document.querySelector(".points");
+    this.scoreText = document.querySelector("#score h1");
+    this.counter = document.querySelector("#counter");
+    this.gameOverScreen = document.querySelector(".game-over");
+    this.startBtn = document.querySelector("#start-btn");
   }
 
+  toggleCityAnimation() {
+    this.cityOuter.classList.toggle("daytoNight");
+    this.cityOuter.classList.toggle("rainAnimation");
+  }
+
+  updateScore(score) {
+    this.scoreText.innerHTML = `Your Score : ${score}`;
+    this.points.innerHTML = `Points : ${score}`;
+  }
+
+  showGameElements() {
+    this.cat.style.visibility = "visible";
+    this.car.style.visibility = "visible";
+    this.gameStarter.style.visibility = "hidden";
+    this.cloud.classList.add("cloudanimation");
+    this.cityInner.classList.add("roadAnimation");
+    this.cat.classList.add("animationcat");
+  }
+
+  stopGameAnimations() {
+    this.cloud.classList.remove("cloudanimation");
+    this.cityInner.classList.remove("roadAnimation");
+    this.cityOuter.classList.remove("rainAnimation");
+    this.cat.classList.remove("animationcat");
+    this.car.style.visibility = "hidden";
+    this.cat.style.visibility = "hidden";
+    this.gameOverScreen.style.visibility = "visible";
+  }
+
+  changeCatImage() {
+    const photos = ["images/dog.gif", "images/cat2.gif", "images/horin.gif"];
+    const count = Math.floor(Math.random() * photos.length);
+    this.cat.src = photos[count];
+  }
 }
 
-    document.addEventListener("keydown", keycontrol);
+class Game {
+  constructor(ui) {
+    this.ui = ui;
+    this.score = 0;
+    this.cross = true;
+    this.music = false;
+    this.paused = false;
+    this.toggleTime = null;
+    this.collisionLoop = null;
 
-    function keycontrol(e) {
-      console.log("your keycode is = " + e.keyCode);
+    this.init();
+  }
 
-    
+  init() {
+    // Start button click
+    this.ui.startBtn.addEventListener("click", () => {
+      this.ui.startBtn.disabled = true;
+      this.ui.startBtn.style.visibility = "hidden";
+      this.startCountdown();
+    });
 
+    // Music toggle (press 'm') and pause (press 's')
+    document.addEventListener("keypress", (e) => {
+      if (e.key === "m") {
+        this.music ? this.ui.gameAudio.pause() : this.ui.gameAudio.play();
+        this.music = !this.music;
+      }
 
-      if (e.keyCode == 38) {
-        myaudio.play();
+      if (e.key === "s") {
+        this.paused = !this.paused;
+      }
+    });
+  }
 
-        car.classList.add("animationCar");
+  startCountdown() {
+    let seconds = parseInt(this.ui.counter.textContent);
+    const countdown = setInterval(() => {
+      seconds--;
+      this.ui.counter.textContent = seconds;
+      if (seconds <= 0) {
+        clearInterval(countdown);
+        this.startGame();
+      }
+    }, 1000);
+  }
 
-        setTimeout(function () {
-          car.classList.remove("animationCar");
+  startGame() {
+    this.ui.showGameElements();
+    this.toggleTime = setInterval(() => this.ui.toggleCityAnimation(), 10000);
+    this.setupControls();
+    this.startCollisionDetection();
+  }
+
+  setupControls() {
+    document.addEventListener("keydown", (e) => {
+      if (this.paused) return;
+
+      const key = e.keyCode;
+
+      if (key === 38) {
+        this.ui.myAudio.play();
+        this.ui.car.classList.add("animationCar");
+        setTimeout(() => {
+          this.ui.car.classList.remove("animationCar");
         }, 900);
       }
-      if (e.keyCode == 39) {
-        let car = document.querySelector(".car");
-        let carxx = parseInt(
-          window.getComputedStyle(car, null).getPropertyValue("left")
-        );
-        car.style.left = carxx + 112 + "px";
+
+      if (key === 39 || key === 37) {
+        const offset = key === 39 ? 112 : -112;
+        const carLeft = parseInt(getComputedStyle(this.ui.car).left);
+        this.ui.car.style.left = carLeft + offset + "px";
       }
-      if (e.keyCode == 37) {
-        let car = document.querySelector(".car");
-        let carxx = parseInt(
-          window.getComputedStyle(car, null).getPropertyValue("left")
-        );
-        console.log(carxx);
-        car.style.left = carxx - 112 + "px";
-      }
-    }
-    /*Collission detection part*/
-    setInterval(() => {
-      var car = document.querySelector(".car");
+    });
+  }
 
-      var gameOver = document.querySelector(".game-over ");
-      var body = document.querySelector("body");
+  startCollisionDetection() {
+    this.collisionLoop = setInterval(() => {
+      if (this.paused) return;
 
+      const carX = parseInt(getComputedStyle(this.ui.car).left);
+      const carY = parseInt(getComputedStyle(this.ui.car).top);
+      const catX = parseInt(getComputedStyle(this.ui.cat).left);
+      const catY = parseInt(getComputedStyle(this.ui.cat).top);
 
-    
-
-
-      let carX = parseInt(
-        window.getComputedStyle(car, null).getPropertyValue("left")
-      );
-      let carY = parseInt(
-        window.getComputedStyle(car, null).getPropertyValue("top")
-      );
-
-      let catX = parseInt(
-        window.getComputedStyle(cat, null).getPropertyValue("left")
-      );
-      let catY = parseInt(
-        window.getComputedStyle(cat, null).getPropertyValue("top")
-      );
-
-      let offsetX = Math.abs(carX - catX);
-      let offsetY = Math.abs(carY - catY);
-      console.log(offsetX, offsetY);
-      //cataudio.play();
+      const offsetX = Math.abs(carX - catX);
+      const offsetY = Math.abs(carY - catY);
 
       if (offsetX < 112 && offsetY < 52) {
-        gameOver.style.visibility = "visible";
-        cat.classList.remove("animationcat");
-      
-      
-        mycloud.classList.remove("cloudanimation");
-        // body.classList.add("opacity");
-        car.style.visibility = "hidden";
-        cat.style.visibility = "hidden";
-        cityInner.classList.remove("roadAnimation");
-        cat.classList.remove("animationcat");
-        cityouter.classList.remove("rainAnimation");
-        clearInterval(toggolTime);
-
-          points.innerHTML="Points : "+score;
-          
-
-
-      }
-      
-      else if (offsetX < 145 && cross) {
-        setInterval(changedImg(),7000);
-        score++;
-        update(score);
-        cross = false;
-        setTimeout(function () {
-          cross = true;
+        this.ui.stopGameAnimations();
+        this.ui.gameAudio.pause();
+        clearInterval(this.toggleTime);
+        clearInterval(this.collisionLoop);
+        this.ui.updateScore(this.score);
+      } else if (offsetX < 145 && this.cross) {
+        setTimeout(() => this.ui.changeCatImage(), 7000);
+        this.score++;
+        this.ui.updateScore(this.score);
+        this.cross = false;
+        setTimeout(() => {
+          this.cross = true;
         }, 100);
       }
     }, 10);
   }
-}, 1000);
-
-/*for score -----------------*/
-function update(score) {
-  document.querySelector("#score h1").innerHTML = "Your Score : " + score;
 }
+
+// Start the game when DOM is ready
+document.addEventListener("DOMContentLoaded", () => {
+  const ui = new UI();
+  new Game(ui);
+});
