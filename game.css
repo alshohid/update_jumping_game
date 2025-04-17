@@ -293,3 +293,84 @@ background: rgb(226, 213, 163);
     text-shadow: 0 0 5px #ffd700, 0 0 10px #ffcc00;
   }
 }
+.music-hint {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  font-size: 28px;
+  padding: 1rem 2rem;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border-radius: 20px;
+  z-index: 1000;
+  opacity: 1;
+  animation: snowfall 3s ease-in-out forwards;
+  transition: opacity 0.5s ease;
+}
+
+.music-hint.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes snowfall {
+  0% {
+    transform: translate(-50%, -80%) scale(0.8);
+    opacity: 0;
+  }
+  30% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 1;
+  }
+  70% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    transform: translate(-50%, 30%) scale(0.9);
+    opacity: 0;
+  }
+}
+
+ /* Default: Desktop */
+body {
+  font-size: 16px;
+  /* base layout */
+}
+
+/* Tablet (portrait and landscape) */
+@media (max-width: 1024px) and (min-width: 701px) {
+  .game-starter {
+    width: 80%;
+    font-size: 18px;
+  }
+
+  .car, .cat {
+    height: 160px;
+    width: 160px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+  .game-starter {
+    width: 95%;
+    left: 2.5%;
+    top: 10%;
+    font-size: 16px;
+  }
+
+  #score h1 {
+    font-size: 1.2rem;
+  }
+
+  .car, .cat {
+    width: 120px;
+    height: 120px;
+  }
+
+  .music-hint {
+    font-size: 20px;
+    padding: 0.5rem 1rem;
+  }
+}

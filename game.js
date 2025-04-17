@@ -61,32 +61,49 @@ class Game {
     this.paused = false;
     this.toggleTime = null;
     this.collisionLoop = null;
+    this.musicHintShown = false;
 
     this.init();
   }
 
   init() {
-    // Start button click
     this.ui.startBtn.addEventListener("click", () => {
       this.ui.startBtn.disabled = true;
       this.ui.startBtn.style.visibility = "hidden";
       this.startCountdown();
     });
 
-    // Music toggle (press 'm') and pause (press 's')
     document.addEventListener("keypress", (e) => {
       if (e.key === "m") {
-        this.music ? this.ui.gameAudio.pause() : this.ui.gameAudio.play();
         this.music = !this.music;
+        this.music ? this.ui.gameAudio.play() : this.ui.gameAudio.pause();
+        this.musicHintShown = true; // ✅ Don’t show hint anymore
       }
 
       if (e.key === "s") {
         this.paused = !this.paused;
+
+        // ✅ Show hint only once, and only if music is off
+        if (!this.music && !this.musicHintShown) {
+          this.showMusicHint();
+          this.musicHintShown = true;
+        }
       }
     });
   }
 
-  startCountdown() {
+  showMusicHint() {
+    const hint = document.getElementById("music-hint");
+    if (!hint) return;
+
+    hint.classList.remove("hidden");
+
+    setTimeout(() => {
+      hint.classList.add("hidden");
+    }, 3500);
+  }
+
+   startCountdown() {
     let seconds = parseInt(this.ui.counter.textContent);
     const countdown = setInterval(() => {
       seconds--;
@@ -157,8 +174,8 @@ class Game {
     }, 10);
   }
 }
-
-// Start the game when DOM is ready
+ 
+// Start game after DOM ready
 document.addEventListener("DOMContentLoaded", () => {
   const ui = new UI();
   new Game(ui);
